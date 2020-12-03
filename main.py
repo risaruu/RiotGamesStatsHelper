@@ -1,5 +1,4 @@
 import requests
-import json
 
 #setting the API Key from a file to not always type it in manually
 apiKeyFile = open('API_Key.txt')
@@ -19,6 +18,12 @@ def getRankedStats(summonerName):
     response = requests.get(url)
     return response.json()
 
+
+
+def calculateWinrate(x, y):
+    z = x + y
+    return x / z * 100
+
 if __name__ == '__main__':
     #Printing out a welcoming message
     print('Welcome to the RiotGamesHelper by Damjan Petrovic!')
@@ -27,5 +32,8 @@ if __name__ == '__main__':
     summonerData = getSummoner(summonerName)
     summonerDataRanked = getRankedStats(summonerName)
 
+    print(summonerData["id"])
+    print(summonerDataRanked[1]["queueType"])
     print(summonerData["name"] + " ist gerade Lv." + str(summonerData["summonerLevel"]))
-    print("Tier: " + summonerDataRanked[0]["tier"] + " " + summonerDataRanked[0]["rank"])
+    print("Tier: " + summonerDataRanked[1]["tier"] + " " + summonerDataRanked[1]["rank"])
+    print("Seine Winrate in" + calculateWinrate(summonerDataRanked[1]["wins"], summonerDataRanked[1]["losses"]))
