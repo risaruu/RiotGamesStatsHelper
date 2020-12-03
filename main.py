@@ -1,7 +1,7 @@
 import requests
 import json
 
-#setting the API Key so you dont need to manually type it all the time
+#setting the API Key from a file to not always type it in manually
 apiKeyFile = open('API_Key.txt')
 apiKey = apiKeyFile.read()
 
@@ -16,7 +16,11 @@ def getRankedStats(summonerName):
     pass
 
 if __name__ == '__main__':
+    #Printing out a welcoming message
     print('Welcome to the RiotGamesHelper by Damjan Petrovic!')
-    print(apiKey)
-    print(type(apiKey))
+
+    summonerName = input('Gib eine den Summoner Name: ')
+    summonerData = getSummoner(summonerName)
+
+    print(summonerData["name"] + " ist gerade Lv." + str(summonerData["summonerLevel"]))
 
