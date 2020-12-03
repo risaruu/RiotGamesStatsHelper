@@ -48,7 +48,9 @@ if __name__ == '__main__':
     print(summonerData["name"] + " ist gerade Lv." + str(summonerData["summonerLevel"]))
     if summonerDataRanked[0]["queueType"] == "RANKED_SOLO_5x5":
         print("Stats für Ranked Solo/Duo")
-    elif summonerDataRanked[0]["queueType"] == "RANKED_FLEX_SR":
-        print("Stats für Ranked Flex")
-    print("Tier: " + summonerDataRanked[0]["tier"] + " " + summonerDataRanked[0]["rank"])
-    print("Winrate beträgt: " + calculateWinrate(summonerDataRanked[0]["wins"], summonerDataRanked[0]["losses"]))
+        print("Tier: " + summonerDataRanked[0]["tier"] + " " + summonerDataRanked[0]["rank"])
+        print("Winrate beträgt: " + calculateWinrate(summonerDataRanked[0]["wins"], summonerDataRanked[0]["losses"]))
+    elif summonerDataRanked[0]["queueType"] != "RANKED_SOLO_5x5":
+        print("Stats für Ranked Solo/Duo")
+        print("Tier: " + summonerDataRanked[1]["tier"] + " " + summonerDataRanked[1]["rank"])
+        print("Winrate beträgt: " + calculateWinrate(summonerDataRanked[1]["wins"], summonerDataRanked[1]["losses"]))
