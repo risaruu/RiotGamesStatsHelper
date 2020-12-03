@@ -7,7 +7,9 @@ apiKey = apiKeyFile.read()
 
 #Function to get the basic summoner data of a given summoner
 def getSummoner(summonerName):
-    pass
+    url = 'https://euw1.api.riotgames.com/lol/summoner/v4/summoners/by-name/' + summonerName + '?api_key=' + apiKey
+    response = requests.get(url)
+    return response.json()
 
 #Function to get the specific ranked data of a given summoner
 def getRankedStats(summonerName):
