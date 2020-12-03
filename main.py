@@ -1,3 +1,3 @@
 if __name__ == '__main__':
-    print('Ja moin!')
+    print('Welcome to the RiotGamesHelper by Damjan Petrovic!')
 
