@@ -13,7 +13,11 @@ def getSummoner(summonerName):
 
 #Function to get the specific ranked data of a given summoner
 def getRankedStats(summonerName):
-    pass
+    customerData = getSummoner(summonerName)
+    summonerId = customerData["id"]
+    url = 'https://euw1.api.riotgames.com/lol/league/v4/entries/by-summoner/' + summonerId + '?api_key=' + apiKey
+    response = requests.get(url)
+    return response.json()
 
 if __name__ == '__main__':
     #Printing out a welcoming message
@@ -21,6 +25,7 @@ if __name__ == '__main__':
 
     summonerName = input('Gib eine den Summoner Name: ')
     summonerData = getSummoner(summonerName)
+    summonerDataRanked = getRankedStats(summonerName)
 
     print(summonerData["name"] + " ist gerade Lv." + str(summonerData["summonerLevel"]))
-
+    print("Tier: " + summonerDataRanked[0]["tier"] + " " + summonerDataRanked[0]["rank"])
