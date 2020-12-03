@@ -1,17 +1,9 @@
 import requests
+import Summoner
 
 #setting the API Key from a file to not always type it in manually
 apiKeyFile = open('API_Key.txt')
 apiKey = apiKeyFile.read()
-
-#Variablen
-name = "default_Name"
-queueType = "default_queue_type"
-wins = 0
-losses = 0
-lvl = 0
-tier = "hiniger"
-rank = "rank"
 
 #Function to get the basic summoner data of a given summoner
 def getSummoner(summonerName):
@@ -32,21 +24,31 @@ def calculateWinrate(x, y):
     z_formatted = round(x / z * 100, 2)
     return str(z_formatted)
 
-def variablenSetzen():
-    pass
+def getMatchHistory(summonerName):
+    customerData = getSummoner(summonerName)
+    accountId = customerData["accountId"]
+    url = 'https://euw1.api.riotgames.com/lol/match/v4/matchlists/by-account/' + accountId + '?api_key=' + apiKey
+    response = requests.get()
+    return response.json()
 
 if __name__ == '__main__':
     #Printing out a welcoming message
     print('Welcome to the RiotGamesHelper by Damjan Petrovic!')
 
     #summonerName = input('Gib eine den Summoner Name: ')
-    summonerName = "athelesia"
+    summonerName = "dasammadabei"
+
     summonerData = getSummoner(summonerName)
     summonerDataRanked = getRankedStats(summonerName)
 
     print(summonerData["id"])
-    print(summonerDataRanked[1]["queueType"])
+    print(summonerData["puuid"])
+    print(summonerData["accountId"] + "\n\n")
+
     print(summonerData["name"] + " ist gerade Lv." + str(summonerData["summonerLevel"]))
-    print(summonerDataRanked[1]["queueType"])
-    print("Tier: " + summonerDataRanked[1]["tier"] + " " + summonerDataRanked[1]["rank"])
-    print("Seine Winrate beträgt: " + calculateWinrate(summonerDataRanked[1]["wins"], summonerDataRanked[1]["losses"]))
+    if summonerDataRanked[0]["queueType"] == "RANKED_SOLO_5x5":
+        print("Stats für Ranked Solo/Duo")
+    elif summonerDataRanked[0]["queueType"] == "RANKED_FLEX_SR":
+        print("Stats für Ranked Flex")
+    print("Tier: " + summonerDataRanked[0]["tier"] + " " + summonerDataRanked[0]["rank"])
+    print("Winrate beträgt: " + calculateWinrate(summonerDataRanked[0]["wins"], summonerDataRanked[0]["losses"]))
