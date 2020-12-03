@@ -20,10 +20,12 @@ def getRankedStats(summonerName):
     response = requests.get(url)
     return response.json()
 
+#Function to simply calculate the winrate out of the wins and losses of an Account
 def calculateWinrate(x, y):
     z = x + y
     z_formatted = round(x / z * 100, 2)
     return str(z_formatted)
+
 
 def getMatchHistory(summonerName):
     customerData = getSummoner(summonerName)
@@ -32,6 +34,7 @@ def getMatchHistory(summonerName):
     response = requests.get()
     return response.json()
 
+#Function to make multiple line inputs possible and also reformat the input into just a list of the usernames
 def getUserInput():
     lines = ""
     for i in range(5):
@@ -43,6 +46,7 @@ def getUserInput():
         text[x] = text[x].replace(" ", "")
     return text
 
+
 if __name__ == '__main__':
     #Printing out a welcoming message
     print('Welcome to the RiotGamesHelper by Damjan Petrovic!')
@@ -50,6 +54,7 @@ if __name__ == '__main__':
     #summonerName = input('Gib eine den Summoner Name: ')
     summonerNames = getUserInput()
 
+    #doing this one time for every Summoner in your team so 5 times
     for y in range(5):
         summonerData = getSummoner(summonerNames[y])
         summonerDataRanked = getRankedStats(summonerNames[y])
