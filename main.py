@@ -1,4 +1,5 @@
 import requests
+import re
 import Summoner
 
 #setting the API Key from a file to not always type it in manually
@@ -31,26 +32,41 @@ def getMatchHistory(summonerName):
     response = requests.get()
     return response.json()
 
+def getUserInput():
+    lines = ""
+    for i in range(5):
+        lines += input()
+
+    text = re.findall(r'.+?joined the lobby', lines)
+    for x in range(5):
+        text[x] = text[x].replace("joined the lobby", "")
+        text[x] = text[x].replace(" ", "")
+    return text
+
 if __name__ == '__main__':
     #Printing out a welcoming message
     print('Welcome to the RiotGamesHelper by Damjan Petrovic!')
 
     #summonerName = input('Gib eine den Summoner Name: ')
-    summonerName = "dasammadabei"
+    summonerNames = getUserInput()
 
-    summonerData = getSummoner(summonerName)
-    summonerDataRanked = getRankedStats(summonerName)
+    for y in range(5):
+        summonerData = getSummoner(summonerNames[y])
+        summonerDataRanked = getRankedStats(summonerNames[y])
 
-    print(summonerData["id"])
-    print(summonerData["puuid"])
-    print(summonerData["accountId"] + "\n\n")
+        print(summonerData["name"] + " ist gerade Lv." + str(summonerData["summonerLevel"]))
+        try:
+            if summonerDataRanked[0]["queueType"] == "RANKED_SOLO_5x5":
+                print("Stats für Ranked Solo/Duo")
+                print("Tier: " + summonerDataRanked[0]["tier"] + " " + summonerDataRanked[0]["rank"])
+                print("Winrate beträgt: " + calculateWinrate(summonerDataRanked[0]["wins"], summonerDataRanked[0]["losses"]))
+            elif summonerDataRanked[0]["queueType"] != "RANKED_SOLO_5x5":
+                print("Stats für Ranked Solo/Duo")
+                print("Tier: " + summonerDataRanked[1]["tier"] + " " + summonerDataRanked[1]["rank"])
+                print("Winrate beträgt: " + calculateWinrate(summonerDataRanked[1]["wins"], summonerDataRanked[1]["losses"]))
+        except:
+            print("Summoner hat keine Ranked Games gespielt.")
 
-    print(summonerData["name"] + " ist gerade Lv." + str(summonerData["summonerLevel"]))
-    if summonerDataRanked[0]["queueType"] == "RANKED_SOLO_5x5":
-        print("Stats für Ranked Solo/Duo")
-        print("Tier: " + summonerDataRanked[0]["tier"] + " " + summonerDataRanked[0]["rank"])
-        print("Winrate beträgt: " + calculateWinrate(summonerDataRanked[0]["wins"], summonerDataRanked[0]["losses"]))
-    elif summonerDataRanked[0]["queueType"] != "RANKED_SOLO_5x5":
-        print("Stats für Ranked Solo/Duo")
-        print("Tier: " + summonerDataRanked[1]["tier"] + " " + summonerDataRanked[1]["rank"])
-        print("Winrate beträgt: " + calculateWinrate(summonerDataRanked[1]["wins"], summonerDataRanked[1]["losses"]))
+        print("ID:" + summonerData["id"])
+        print("Puuid" + summonerData["puuid"])
+        print("AccountID" + summonerData["accountId"] + "\n\n")
