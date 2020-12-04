@@ -1,3 +1,5 @@
+from statistics import median
+
 import requests
 
 apiKeyFile = open('API_Key.txt')
@@ -11,7 +13,7 @@ def getSummoner(summonerName):
 def getMatchHistory(summonerName):
     customerData = getSummoner(summonerName)
     accountId = customerData["accountId"]
-    url = 'https://euw1.api.riotgames.com/lol/match/v4/matchlists/by-account/' + accountId + '?endIndex=20&api_key=' + apiKey
+    url = 'https://euw1.api.riotgames.com/lol/match/v4/matchlists/by-account/' + accountId + '?endIndex=50&api_key=' + apiKey
     response = requests.get(url)
     return response.json()
 
@@ -19,6 +21,10 @@ def getMatchStats(matchId):
     url = "https://euw1.api.riotgames.com/lol/match/v4/matches/" + str(matchId) + "?api_key=" + apiKey
     response = requests.get(url)
     return response.json()
+
+def getMedian(list):
+    return median(list)
+
 
 games = []
 championId = []
@@ -29,15 +35,15 @@ assists = []
 totalDamageDealt = []
 visionScore = []
 
-matchHistory = getMatchHistory('lebenistleiden')
+matchHistory = getMatchHistory(summonerNames[y])
 for each in matchHistory["matches"]:
     games.append(each["gameId"])
     championsPlayed.append(each["champion"])
 
-for x in range(0, 20):
-    matchData = getMatchStats(games[x])
+for z in range(0, 20):
+    matchData = getMatchStats(games[z])
     for part in matchData["participants"]:
-        if part["championId"] == championsPlayed[x]:
+        if part["championId"] == championsPlayed[z]:
             championId.append(part["championId"])
             kills.append(part["stats"]["kills"])
             deaths.append(part["stats"]["deaths"])
@@ -45,10 +51,8 @@ for x in range(0, 20):
             totalDamageDealt.append(part["stats"]["totalDamageDealtToChampions"])
             visionScore.append(part["stats"]["visionScore"])
 
-print(games)
-print(championId)
-print(kills)
-print(deaths)
-print(assists)
-print(totalDamageDealt)
-print(visionScore)
+# print(games)
+# print(championId)
+print("KDA: " + str(getMedian(kills)) + " /" + str(getMedian(deaths)) + " / " + str(getMedian(assists)))
+print("Damage dealt to Champions: " + str(getMedian(totalDamageDealt)))
+print("Vision Score: " + str(getMedian(visionScore)) + "\n")

@@ -10,4 +10,3 @@ class Summoner(object):
         self.wins = wins
         self.losses = losses
 
-
