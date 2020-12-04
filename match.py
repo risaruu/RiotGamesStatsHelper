@@ -23,6 +23,12 @@ def getMatchStats(matchId):
 games = []
 championId = []
 championsPlayed = []
+kills = []
+deaths = []
+assists = []
+totalDamageDealt = []
+visionScore = []
+
 matchHistory = getMatchHistory('lebenistleiden')
 for each in matchHistory["matches"]:
     games.append(each["gameId"])
@@ -33,6 +39,16 @@ for x in range(0, 20):
     for part in matchData["participants"]:
         if part["championId"] == championsPlayed[x]:
             championId.append(part["championId"])
+            kills.append(part["stats"]["kills"])
+            deaths.append(part["stats"]["deaths"])
+            assists.append(part["stats"]["assists"])
+            totalDamageDealt.append(part["stats"]["totalDamageDealtToChampions"])
+            visionScore.append(part["stats"]["visionScore"])
 
 print(games)
 print(championId)
+print(kills)
+print(deaths)
+print(assists)
+print(totalDamageDealt)
+print(visionScore)
